@@ -259,7 +259,7 @@ def inline(call):
                           x='$inc'
                       else:
                           x='$set'
-                      users.update_one({'id':user['id']},{x:{item:1}})
+                      users.update_one({'id':user['id']},{x:{'items.'+item:1}})
                       text='Вы успешно скрафтили предмет "'+resname(item)+'"!'
                       medit(text, call.message.chat.id, call.message.message_id)
                   else:
