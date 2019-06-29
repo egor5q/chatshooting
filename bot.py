@@ -114,7 +114,7 @@ def resources(m):
      if user!=None:
          text='Ваши предметы:\n\n'
          for ids in user['items']:
-             text+=nameres(ids)+': '+str(user['items'][ids])+'\n'
+             text+=resname(ids)+': '+str(user['items'][ids])+'\n'
          bot.send_message(m.chat.id, text)
         
         
@@ -248,14 +248,15 @@ def inline(call):
                     for ids in recipes[item]:
                         if ids!='info':
                             users.update_one({'id':user['id']},{'$inc':{'items.'+ids:-recipes[item][ids]}})
-                if item in user['items']:
-                    x='$inc'
+                    if item in user['items']:
+                        x='$inc'
+                    else:
+                        x='$set'
+                    users.update_one({'id':user['id']},{x:{item:1}})
+                    text='Вы успешно скрафтили предмет "'+resname(item)+'"!'
+                    medit(text, call.message.chat.id, call.message.message_id)
                 else:
-                    x='$set'
-                users.update_one({'id':user['id']},{x:{item:1}})
-                text='Вы успешно скрафтили предмет "'+resname(item)+'"!'
-                medit(text, call.message.chat.id, call.message.message_id)
-                
+                    medit('Не хватает ресурсов!', call.message.chat.id, call.message.message_id)
    
             if call.data=='back':
                 mainmenu(user, call, edit=True)
