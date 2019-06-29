@@ -126,6 +126,7 @@ def allmessages(m):
        
     
 def shoot(m, bullet):
+    d_chance=10
     user=users.find_one({'id':m.from_user.id})
     if user!=None:
         if bullet='iron_bullet':
@@ -140,8 +141,53 @@ def shoot(m, bullet):
             if user['items'][bullet]>0:
                 shoot=True
         if shoot==True:
-            try:
-                
+            data=time.time()
+            data=data+timer
+            if m.reply_to_message!=None:
+                try:
+                    user2=users.find_one({'id':m.reply_to_message.from_user.id})
+                    if user2!=None:
+                        i_shield=False
+                        d_shield=False
+                        if 'iron_shield' in user2['items']:
+                            if user2['items']['iron_shield']>0:
+                                i_shield=True
+                        if 'diamond_shield' in user2['items']:
+                            if user2['items']['diamond_shield']>0:
+                                d_shield=True
+                        if user['username']==None:
+                            name1=user['name']
+                        else:
+                            name1='@'+user['username']
+                        if user2['username']==None:
+                            name2=user2['name']
+                        else:
+                            name2='@'+user2['username']
+                        restricting=user2['id']
+                        if d_shield==True and random.randint(1,100)<=d_chance:
+                            text=name1+' попытался застрелить '+name2+', используя ('+resname(bullet).lower()+'), но алмазный щит цели отразил выстрел. '+name1+' убил себя. Респавн через ('+str(int(timer/60))+') минут.'
+                            restricting=user['id']
+                        elif i_shield==True and bullet!='diamond_bullet':
+                            text=name1+' попытался застрелить '+name2+', используя ('+resname(bullet).lower()+'), но у цели был железный щит. '+name1+' убил себя. Респавн через ('+str(int(timer/60))+') минут.'
+                            restricting=user['id']
+                        else:
+                            text=name1+' стреляет в '+name2+', используя ('+resname(bullet).lower()+'). Цель мертва. Респавн цели через ('+str(int(timer/60))+') минут.'
+                        bot.restrict_chat_member(m.chat.id, restricting, data, can_send_messages=False,
+                                                can_send_media_messages=False, can_send_other_messages=False)
+                        bot.send_message(m.chat.id, text)
+                        
+                    else:
+                        bot.send_message(m.chat.id, 'Этот юзер еще не писал ничего в чат!')
+                    
+                    
+                except:
+                    bot.send_message(m.chat.id, 'Либо вы стреляете в админа, либо у бота нет права на мут!')
+                    bot.send_message(441399484, traceback.format_exc())
+                    
+            else:
+                bot.send_message(m.chat.id, 'Нужно реплайнуть это на кого-то!')
+        else:
+            bot.send_message(m.chat.id, 'У вас нет такой пули!')
     
     
     
