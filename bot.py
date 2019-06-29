@@ -73,16 +73,17 @@ recipes={
 
 
 
+
 @bot.message_handler(commands=['farm'])
 def farm(m):
-    user=users.find_one({'id':m.from_user.id})
+    user=users.find_one({'id':m.from_user.id}) 
     if user!=None:
         if user['id'] not in rest:
             findres(user, m)
         else:
             bot.send_message(m.chat.id, 'Отдохните минуту перед следующей добычей ресурсов!')
-
-
+            
+      
             
 @bot.message_handler(commands=['craft'])
 def craft(m):
@@ -91,6 +92,7 @@ def craft(m):
         mainmenu(user, m)
             
 
+            
 def mainmenu(user, m, edit=False):  
     kb=types.InlineKeyboardMarkup()
     text='Выберите предмет для просмотра информации.'
@@ -105,6 +107,20 @@ def mainmenu(user, m, edit=False):
         medit(text, m.message.chat.id, m.message.message_id)
             
 
+            
+@bot.message_handler(commands=['resources'])
+def resources(m):
+     user=users.find_one({'id':m.from_user.id})
+     if user!=None:
+         text='Ваши предметы:\n\n'
+         for ids in user['items']:
+             text+=nameres(ids)+': '+str(user['items'][ids])+'\n'
+         bot.send_message(m.chat.id, text)
+        
+        
+        
+
+        
 @bot.message_handler()
 def allmessages(m):
     if users.find_one({'id':m.from_user.id})==None:
@@ -219,6 +235,8 @@ def inline(call):
                 for ids in recipes[item]:
                     if ids!='info':
                         if ids in user['items']:
+                            print(user['items'][ids])
+                            print(recipes[item][ids])
                             if user['items'][ids]>=recipes[item][ids]:
                                 pass
                             else:
