@@ -116,11 +116,11 @@ def allmessages(m):
         user=users.find_one({'id':m.from_user.id})
       
     bullet=None
-    if m.text[:12].lower()=='железная пуля':
+    if m.text[:13].lower()=='железная пуля':
         bullet='iron_bullet'
-    elif m.text[:11].lower()=='золотая пуля':
+    elif m.text[:12].lower()=='золотая пуля':
         bullet='gold_bullet'
-    elif m.text[:12].lower()=='алмазная пуля':
+    elif m.text[:13].lower()=='алмазная пуля':
         bullet='diamond_bullet'
     if bullet!=None:
         shoot(m, bullet)
