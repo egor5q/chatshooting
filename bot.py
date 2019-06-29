@@ -201,15 +201,16 @@ def inline(call):
         if int(call.data.split(' ')[0])==user['id']:
             if 'info' in call.data:
                 item=call.data.split(' ')[2]
-                text=recipes[item]['info']
-                text+='\n'
-                text+='Требуемые ресурсы:\n\n'
+                textt=recipes[item]['info']
+                textt+='\n'
+                textt+='Требуемые ресурсы:\n\n'
                 for ids in recipes[item]:
                     if ids!='info':
-                        text+=resname(ids)+': '+str(recipes[item][ids])+'\n'
+                        textt+=resname(ids)+': '+str(recipes[item][ids])+'\n'
                 kb=types.InlineKeyboardMarkup()
                 kb.add(types.InlineKeyboardButton(text='Скрафтить', callback_data=str(user['id'])+' craft '+item))
                 kb.add(types.InlineKeyboardButton(text='Назад', callback_data='back'))
+                medit(textt, call.message.chat.id, call.message.message_id)
                 
                 
             elif 'craft' in call.data:
