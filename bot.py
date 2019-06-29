@@ -129,7 +129,7 @@ def shoot(m, bullet):
     d_chance=10
     user=users.find_one({'id':m.from_user.id})
     if user!=None:
-        if bullet='iron_bullet':
+        if bullet=='iron_bullet':
             timer=60
         if bullet=='gold_bullet':
             timer=180
