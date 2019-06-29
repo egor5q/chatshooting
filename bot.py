@@ -311,6 +311,7 @@ def resname(res):
         return 'Алмазный щит'
     if res=='exp_bottle':
         return 'Бутыль опыта'
+    return 'Без названия ('+res+')'
 
 
 def createuser(user):
