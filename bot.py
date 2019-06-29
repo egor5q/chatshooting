@@ -206,7 +206,7 @@ def inline(call):
                 text+='Требуемые ресурсы:\n\n'
                 for ids in recipes[item]:
                     if ids!='info':
-                        text+=resname(ids)+': '+str(recipes[ids])+'\n'
+                        text+=resname(ids)+': '+str(recipes[item][ids])+'\n'
                 kb=types.InlineKeyboardMarkup()
                 kb.add(types.InlineKeyboardButton(text='Скрафтить', callback_data=str(user['id'])+' craft '+item))
                 kb.add(types.InlineKeyboardButton(text='Назад', callback_data='back'))
@@ -297,6 +297,10 @@ def resname(res):
         return 'Сера'
     if res=='leather':
         return 'Кожа'
+    if res=='glass':
+        return 'Стекло'
+    if res=='exp':
+        return 'Опыт'
     if res=='iron_bullet':
         return 'Железная пуля'
     if res=='gold_bullet':
