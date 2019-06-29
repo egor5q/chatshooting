@@ -210,7 +210,7 @@ def inline(call):
                 kb=types.InlineKeyboardMarkup()
                 kb.add(types.InlineKeyboardButton(text='Скрафтить', callback_data=str(user['id'])+' craft '+item))
                 kb.add(types.InlineKeyboardButton(text='Назад', callback_data='back'))
-                medit(textt, call.message.chat.id, call.message.message_id)
+                medit(textt, call.message.chat.id, call.message.message_id, reply_markup=kb)
                 
                 
             elif 'craft' in call.data:
