@@ -194,8 +194,11 @@ def shoot(m, bullet):
                         elif i_shield==True and bullet!='diamond_bullet':
                             text=name1+' попытался застрелить '+name2+', используя ('+resname(bullet).lower()+'), но у цели был железный щит. '+name1+' убил себя. Респавн через ('+str(int(timer/60))+') минут.'
                             restricting=user['id']
+                            users.update_one({'id':user['id']},{'$inc':{'items.'+bullet:-1}})
+                            users.update_one({'id':user2['id']},{'$inc':{'items.iron_shield':-1}})
                         else:
                             text=name1+' стреляет в '+name2+', используя ('+resname(bullet).lower()+'). Цель мертва. Респавн цели через ('+str(int(timer/60))+') минут.'
+                            users.update_one({'id':user['id']},{'$inc':{'items.'+bullet:-1}})
                         bot.restrict_chat_member(m.chat.id, restricting, data, can_send_messages=False,
                                                 can_send_media_messages=False, can_send_other_messages=False)
                         bot.send_message(m.chat.id, text)
