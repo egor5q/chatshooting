@@ -78,7 +78,7 @@ def farm(m):
     user=users.find_one({'id':m.from_user.id})
     if user!=None:
         if user['id'] not in rest:
-            findres(user)
+            findres(user, m)
         else:
             bot.send_message(m.chat.id, 'Отдохните минуту перед следующей добычей ресурсов!')
 
@@ -249,7 +249,7 @@ def inline(call):
 
 
 
-def findres(user):
+def findres(user, m):
     taken={}
     for ids in allres:
         amount=0
