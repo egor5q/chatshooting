@@ -73,14 +73,6 @@ recipes={
 
 
 
-
-
-
-@bot.message_handler(commands=['attack'])
-def attack(m):
-    pass
-
-
 @bot.message_handler(commands=['farm'])
 def farm(m):
     user=users.find_one({'id':m.from_user.id})
@@ -122,9 +114,37 @@ def allmessages(m):
     if user['name']!=m.from_user.first_name or user['username']!=m.from_user.username:
         users.update_one({'id':user['id']},{'$set':{'name':m.from_user.first_name, 'username':m.from_user.username}})
         user=users.find_one({'id':m.from_user.id})
+        
+    if m.text[:12].lower()=='железная пуля':
+        bullet='iron_bullet'
+    elif m.text[:11].lower()=='золотая пуля':
+        bullet='gold_bullet'
+    elif m.text[:12].lower()=='алмазная пуля':
+        bullet='diamond_bullet'
+    shoot(m, bullet)
+        
+       
     
-        
-        
+def shoot(m, bullet):
+    user=users.find_one({'id':m.from_user.id})
+    if user!=None:
+        if bullet='iron_bullet':
+            timer=60
+        if bullet=='gold_bullet':
+            timer=180
+        if bullet=='diamond_bullet':
+            timer=300
+            
+        shoot=False
+        if bullet in user['items']:
+            if user['items'][bullet]>0:
+                shoot=True
+        if shoot==True:
+            try:
+                
+    
+    
+    
         
 @bot.callback_query_handler(func=lambda call:True)
 def inline(call):
