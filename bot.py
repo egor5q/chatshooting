@@ -74,6 +74,12 @@ recipes={
 
 
 
+@bot.message_handler(commands=['reset'])
+def resett(m):
+    if m.from_user.id==441399484:
+        users.update_many({},{'$set':{'items':{}}})
+        bot.send_message(m.chat.id, 'yes')
+
 @bot.message_handler(commands=['farm'])
 def farm(m):
     user=users.find_one({'id':m.from_user.id}) 
