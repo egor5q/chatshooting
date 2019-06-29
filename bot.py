@@ -214,59 +214,60 @@ def shoot(m, bullet):
 def inline(call):
     user=users.find_one({'id':call.from_user.id})
     if user!=None:
-        if int(call.data.split(' ')[0])==user['id']:
-            if 'info' in call.data:
-                item=call.data.split(' ')[2]
-                textt=recipes[item]['info']
-                textt+='\n'
-                textt+='Требуемые ресурсы:\n\n'
-                for ids in recipes[item]:
-                    if ids!='info':
-                        textt+=resname(ids)+': '+str(recipes[item][ids])+'\n'
-                kb=types.InlineKeyboardMarkup()
-                kb.add(types.InlineKeyboardButton(text='Скрафтить', callback_data=str(user['id'])+' craft '+item))
-                kb.add(types.InlineKeyboardButton(text='Назад', callback_data='back'))
-                medit(textt, call.message.chat.id, call.message.message_id, reply_markup=kb)
-                
-                
-            elif 'craft' in call.data:
-                item=call.data.split(' ')[2]
-                craftable=True
-                for ids in recipes[item]:
-                    if ids!='info':
-                        if ids in user['items']:
-                            print(user['items'][ids])
-                            print(recipes[item][ids])
-                            if user['items'][ids]>=recipes[item][ids]:
-                                pass
-                            else:
-                                craftable=False
-                        else:
-                            craftable=False
-                            
-                if craftable==True:
-                    for ids in recipes[item]:
-                        if ids!='info':
-                            users.update_one({'id':user['id']},{'$inc':{'items.'+ids:-recipes[item][ids]}})
-                    if item in user['items']:
-                        x='$inc'
-                    else:
-                        x='$set'
-                    users.update_one({'id':user['id']},{x:{item:1}})
-                    text='Вы успешно скрафтили предмет "'+resname(item)+'"!'
-                    medit(text, call.message.chat.id, call.message.message_id)
-                else:
-                    medit('Не хватает ресурсов!', call.message.chat.id, call.message.message_id)
-   
-            if call.data=='back':
-                mainmenu(user, call, edit=True)
-                
-            
-        else:
-            bot.answer_callback_query(call.id, 'Это не ваше меню!')
+        try:
+          if int(call.data.split(' ')[0])==user['id']:
+              if 'info' in call.data:
+                  item=call.data.split(' ')[2]
+                  textt=recipes[item]['info']
+                  textt+='\n'
+                  textt+='Требуемые ресурсы:\n\n'
+                  for ids in recipes[item]:
+                      if ids!='info':
+                          textt+=resname(ids)+': '+str(recipes[item][ids])+'\n'
+                  kb=types.InlineKeyboardMarkup()
+                  kb.add(types.InlineKeyboardButton(text='Скрафтить', callback_data=str(user['id'])+' craft '+item))
+                  kb.add(types.InlineKeyboardButton(text='Назад', callback_data='back'))
+                  medit(textt, call.message.chat.id, call.message.message_id, reply_markup=kb)
+                  
+                  
+              elif 'craft' in call.data:
+                  item=call.data.split(' ')[2]
+                  craftable=True
+                  for ids in recipes[item]:
+                      if ids!='info':
+                          if ids in user['items']:
+                              print(user['items'][ids])
+                              print(recipes[item][ids])
+                              if user['items'][ids]>=recipes[item][ids]:
+                                  pass
+                              else:
+                                  craftable=False
+                          else:
+                              craftable=False
+                              
+                  if craftable==True:
+                      for ids in recipes[item]:
+                          if ids!='info':
+                              users.update_one({'id':user['id']},{'$inc':{'items.'+ids:-recipes[item][ids]}})
+                      if item in user['items']:
+                          x='$inc'
+                      else:
+                          x='$set'
+                      users.update_one({'id':user['id']},{x:{item:1}})
+                      text='Вы успешно скрафтили предмет "'+resname(item)+'"!'
+                      medit(text, call.message.chat.id, call.message.message_id)
+                  else:
+                      medit('Не хватает ресурсов!', call.message.chat.id, call.message.message_id)
+                  
+              
+          else:
+              bot.answer_callback_query(call.id, 'Это не ваше меню!')
 
+        except:
+            pass
         
-
+        if call.data=='back':
+            mainmenu(user, call, edit=True)
 
 
 def findres(user, m):
