@@ -264,7 +264,7 @@ def findres(user):
                 x='$inc'
             else:
                 x='$set'
-            users.update_one({'id':user['id']},{x:'items.'+ids:taken[ids]}})
+            users.update_one({'id':user['id']},{x:{'items.'+ids:taken[ids]}})
     else:
         text='Вы ничего не добыли!'
     bot.send_message(m.chat.id, text)
