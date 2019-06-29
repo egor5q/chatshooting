@@ -114,14 +114,16 @@ def allmessages(m):
     if user['name']!=m.from_user.first_name or user['username']!=m.from_user.username:
         users.update_one({'id':user['id']},{'$set':{'name':m.from_user.first_name, 'username':m.from_user.username}})
         user=users.find_one({'id':m.from_user.id})
-        
+      
+    bullet=None
     if m.text[:12].lower()=='железная пуля':
         bullet='iron_bullet'
     elif m.text[:11].lower()=='золотая пуля':
         bullet='gold_bullet'
     elif m.text[:12].lower()=='алмазная пуля':
         bullet='diamond_bullet'
-    shoot(m, bullet)
+    if bullet!=None:
+        shoot(m, bullet)
         
        
     
