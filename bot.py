@@ -56,7 +56,7 @@ recipes={
                    'leather':10,
                    'info':iss
              },
-    'diamond_shield':{'diamond':40,
+    'diamond_shield':{'diamond':20,
                       'leather':40,
                       'iron':50,
                       'gold':15,
